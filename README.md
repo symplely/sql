@@ -1,5 +1,7 @@
 # **sql**
 
+**This package is under development, the asynchronous parts has not been implemented or added.**
+
 ***The async class to make it very easy to deal with database connections.***
 
 This is an version of ezsql with **async** capability. In order to use the _native async_ feature of **mysql** or **postgresql**,
