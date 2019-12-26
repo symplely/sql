@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ezsql\Database;
@@ -9,7 +10,7 @@ use ezsql\ConfigInterface;
 use ezsql\DatabaseInterface;
 
 class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
-{    
+{
     protected $return_val = 0;
     protected $is_insert = false;
     protected $shortcutUsed = false;
@@ -26,7 +27,7 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
     );
 
     /**
-    * Database connection handle 
+    * Database connection handle
     * @var resource
     */
     protected $dbh;
@@ -44,16 +45,16 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
     protected $database;
 
     public function __construct(ConfigInterface $settings = null)
-    {        
+    {
         if (empty($settings)) {
             throw new Exception(\MISSING_CONFIGURATION);
         }
-        
+
         parent::__construct();
         $this->database = $settings;
 
-        if (empty($GLOBALS['ez'.\SQLSRV]))
-            $GLOBALS['ez'.\SQLSRV] = $this;
+        if (empty($GLOBALS['ez' . \SQLSRV]))
+            $GLOBALS['ez' . \SQLSRV] = $this;
         \setInstance($this);
     }
 
@@ -71,8 +72,10 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
         $return_val = false;
         $this->_connected = false;
         if (!$this->connect($user, $password, $name, $host));
-        else{ $return_val = true;
-            $this->_connected = true;}
+        else {
+            $return_val = true;
+            $this->_connected = true;
+        }
         return $return_val;
     }
 
@@ -132,20 +135,20 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
     }
 
     /**
-    * Creates a prepared query, binds the given parameters and returns the result of the executed
-    *
-    * @param string $query
-    * @param array $param
-    * @return bool|mixed
-    */
+     * Creates a prepared query, binds the given parameters and returns the result of the executed
+     *
+     * @param string $query
+     * @param array $param
+     * @return bool|mixed
+     */
     public function query_prepared(string $query, array $param = null)
-    { 
+    {
         $result = @\sqlsrv_query($this->dbh, $query, $param);
-        if ($this->shortcutUsed) 
-            return $result; 
-            
+        if ($this->shortcutUsed)
+            return $result;
+
         $this->return_val = 0;
-        return $this->processQueryResult($query, $result); 
+        return $this->processQueryResult($query, $result);
     }
 
     /**
@@ -155,10 +158,10 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
      * @param mixed $result
      * @return bool|void
      */
-    private function processQueryResult(string $query, $result = null)  
+    private function processQueryResult(string $query, $result = null)
     {
         $this->shortcutUsed = false;
-        
+
         if (!empty($result))
             $this->result = $result;
 
@@ -189,7 +192,6 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
                     $identityRow = @\sqlsrv_fetch($identityResultset);
                     $this->insert_id = $identityRow[0];
                 }
-
             }
             // Return number of rows affected
             $this->return_val = $this->_affectedRows;
@@ -240,7 +242,7 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
 
     /**
      * Perform sqlsrv query and try to determine result value
-     * 
+     *
      * @param string
      * @param bool
      * @return bool|mixed
@@ -286,7 +288,8 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
 
         // If there is no existing database connection then try to connect
         if (!isset($this->dbh) || !$this->dbh) {
-            $this->connect($this->database->getUser(),
+            $this->connect(
+                $this->database->getUser(),
                 $this->database->getPassword(),
                 $this->database->getName(),
                 $this->database->getHost()
@@ -433,7 +436,7 @@ class ez_sqlsrv extends ezsqlModel implements DatabaseInterface
     {
         return $this->dbh;
     }
-        
+
     /**
      * Begin sqlsrv Transaction
      */
